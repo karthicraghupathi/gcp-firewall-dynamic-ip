@@ -39,9 +39,15 @@ A simple script to update firewall rules on GCP for dynamic IPs.
 
 On the machine where the script will run:
 
-- Install the Google Cloud SDK:
+- Install the Google Cloud SDK. These instructions are for Debian / Ubuntu systems. Find the correct instructions for your OS at https://cloud.google.com/sdk/docs/install.
   ```bash
-  sudo apt-get install -y google-cloud-sdk
+  sudo apt update && sudo apt install apt-transport-https ca-certificates gnupg curl
+
+  curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+
+  echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+
+  sudo apt update && sudo apt install google-cloud-cli
   ```
 - Authenticate as the Service Account:
   - Download the service account's JSON key from the Google Cloud Console.
@@ -170,5 +176,14 @@ There is a helper script `setup_env.sh` that you can modify to set the appropria
 Use `cron` to automate changing the IP address:
 
 ```
+# shell needs to be bash; add this to the top of the crontab
+SHELL=/usr/bin/bash
+
 */2 * * * * source /var/tasks/gcp-firewall-dynamic-ip/setup_env.sh && /var/tasks/gcp-firewall-dynamic-ip/updater.sh
+```
+
+OR
+
+```
+*/2 * * * * /usr/bin/bash -c "source /var/tasks/gcp-firewall-dynamic-ip/setup_env.sh && /var/tasks/gcp-firewall-dynamic-ip/updater.sh"
 ```
