@@ -13,14 +13,14 @@ if [ -z "$FIREWALL_RULES" ]; then
   exit 1
 fi
 
-IP_FILE=./publicip.txt
+IP_FILE=./publicip-"$CLOUDSDK_ACTIVE_CONFIG_NAME".txt
 PUBLIC_IP=$(curl -s https://api.ipify.org)
 
 # Set the working directory to the location of the script
 cd "$(dirname "$0")" || exit 1
 
 # check if ip is same as last check
-grep $PUBLIC_IP $IP_FILE > /dev/null 2>&1
+grep "$PUBLIC_IP" "$IP_FILE" > /dev/null 2>&1
 
 # if not a match, update firewall rules
 if [ $? -ne 0 ]; then
