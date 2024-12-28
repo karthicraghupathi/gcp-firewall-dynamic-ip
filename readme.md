@@ -1,4 +1,4 @@
-# GCP Firwall Update for Dynamic IPs
+# GCP Firewall Update for Dynamic IPs
 
 A simple script to update firewall rules on GCP for dynamic IPs.
 
